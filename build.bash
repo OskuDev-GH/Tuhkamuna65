@@ -1,1 +1,1 @@
-gcc main.c -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -o tuhkamuna65
+gcc main.c -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -o ./build/tuhkamuna65
