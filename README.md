@@ -1,5 +1,9 @@
-Compilation on el Linux:
+# Tuhkamuna
+
+## Linux
+
+Compilation:
  - run build.bash
 
-Running on el Linux:
+Running:
  - cd into build and do "./tuhkamuna65"
