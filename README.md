@@ -14,6 +14,8 @@ Run this command: `make`
 Run this command in the build directory: `./tuhkamuna65`
 
 ## How to play
+
+### Goal
 Try to get as many points as possible
 
 ### Controls
