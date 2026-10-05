@@ -7,7 +7,7 @@
 
 #define HIGHSCORE_PATH "high.bin"
 
-Texture2D loadTexture(char *path, int width, int height);
+Texture2D loadTexture(char* path, int width, int height);
 int readHighscore();
 void writeHighscore(int score);
 int randint(int min, int max);
@@ -15,7 +15,7 @@ int game(void);
 
 int windowWidth = 1440, windowHeight = 1080;
 
-const int screenWidth = 960, screenHeight = 720;
+const int renderWidth = 960, renderHeight = 720;
 
 int highscore = 0;
 
@@ -29,7 +29,7 @@ int main(void) {
     InitAudioDevice();
     SetTargetFPS(0);
 
-    panda = loadTexture("assets/panda man.png", screenWidth, screenHeight);
+    panda = loadTexture("assets/panda man.png", renderWidth, renderHeight);
     cockroach = loadTexture("assets/cockroach.png", 150, 500);
     scaryFace = loadTexture("assets/scary face.png", 100, 130);
 
@@ -53,7 +53,7 @@ int main(void) {
     }
 }
 
-Texture2D loadTexture(char *path, int width, int height) {
+Texture2D loadTexture(char* path, int width, int height) {
     Image image = LoadImage(path);
     ImageResize(&image, width, height);
     Texture2D texture = LoadTextureFromImage(image);
@@ -63,7 +63,7 @@ Texture2D loadTexture(char *path, int width, int height) {
 }
 
 int readHighscore() {
-    FILE *file = fopen(HIGHSCORE_PATH, "rb");
+    FILE* file = fopen(HIGHSCORE_PATH, "rb");
     if (file == NULL) {
         printf("Could not open highscore file!\n");
 
@@ -79,7 +79,7 @@ int readHighscore() {
 }
 
 void writeHighscore(int score) {
-    FILE *file = fopen(HIGHSCORE_PATH, "wb");
+    FILE* file = fopen(HIGHSCORE_PATH, "wb");
     if (file == NULL) {
         printf("Could not open highscore file!\n");
     }
@@ -98,15 +98,15 @@ int randint(int min, int max) {
 int game(void) {
     highscore = readHighscore();
 
-    Vector2 playerPosition = { screenWidth / 4.0, screenHeight / 2.0 };
+    Vector2 playerPosition = { renderWidth / 4.0, renderHeight / 2.0 };
 
     int speed = 100;
     double playerVelocityX = 0;
     double playerVelocityY = 0;
 
     int obstacleGap = 750; //gap between top and bottom obstacle things
-    Vector2 obstacle1Pos = { screenWidth / 2.0 - cockroach.width / 2.0, screenHeight / 2.0 - cockroach.height / 2.0 };
-    Vector2 obstacle2Pos = { screenWidth, screenHeight / 2.0 - cockroach.height / 2.0 };
+    Vector2 obstacle1Pos = { renderWidth / 2.0 - cockroach.width / 2.0, renderHeight / 2.0 - cockroach.height / 2.0 };
+    Vector2 obstacle2Pos = { renderWidth, renderHeight / 2.0 - cockroach.height / 2.0 };
     
     int paused = 0;
     int gameStarted = 0;
@@ -122,7 +122,7 @@ int game(void) {
 
     PlayMusicStream(music);
 
-    RenderTexture2D target = LoadRenderTexture(screenWidth, screenHeight);
+    RenderTexture2D target = LoadRenderTexture(renderWidth, renderHeight);
 
     while (!WindowShouldClose()) {
         UpdateMusicStream(music);
@@ -130,7 +130,7 @@ int game(void) {
         float dt = GetFrameTime();
 
         BeginTextureMode(target);
-        DrawTexture(panda, screenWidth / 2 - panda.width / 2, screenHeight / 2 - panda.height / 2, WHITE);
+        DrawTexture(panda, renderWidth / 2 - panda.width / 2, renderHeight / 2 - panda.height / 2, WHITE);
 
         float obs1X = obstacle1Pos.x - (float)cockroach.width / 2;
         float obs2X = obstacle2Pos.x - (float)cockroach.width / 2;
@@ -154,7 +154,7 @@ int game(void) {
                 playerPosition.x += dt * playerVelocityX;
                 playerPosition.y += dt * playerVelocityY;
                 
-                if (playerPosition.y < 0 || playerPosition.y > screenHeight) {
+                if (playerPosition.y < 0 || playerPosition.y > renderHeight) {
                     playerVelocityX = 500;
                     playerVelocityY = -500;
                     dead = 1;
@@ -180,8 +180,8 @@ int game(void) {
                 }
 
                 if (paused) {
-                    DrawText("game is pause", screenWidth / 10, screenHeight / 2 - 75, 100, BLUE);
-                    DrawText("no (press P to unpause)", screenWidth / 10, screenHeight / 2 + 25, 50, DARKBLUE);
+                    DrawText("game is pause", renderWidth / 10, renderHeight / 2 - 75, 100, BLUE);
+                    DrawText("no (press P to unpause)", renderWidth / 10, renderHeight / 2 + 25, 50, DARKBLUE);
                 }
                 else {
                     obstacle1Pos.x -= 2 * speed * dt;
@@ -189,13 +189,13 @@ int game(void) {
                 }
 
                 if (obstacle1Pos.x < 0 - cockroach.width / 2.0) {
-                    obstacle1Pos.x = screenWidth + cockroach.width / 2.0;
-                    obstacle1Pos.y = randint(screenHeight / 2.0 - cockroach.height / 2.0 - 100, screenHeight / 2.0 - cockroach.height / 2.0 + 100);
+                    obstacle1Pos.x = renderWidth + cockroach.width / 2.0;
+                    obstacle1Pos.y = randint(renderHeight / 2.0 - cockroach.height / 2.0 - 100, renderHeight / 2.0 - cockroach.height / 2.0 + 100);
                 }
 
                 if (obstacle2Pos.x < 0 - cockroach.width / 2.0) {
-                    obstacle2Pos.x = screenWidth + cockroach.width / 2.0;
-                    obstacle2Pos.y = randint(screenHeight / 2.0 - cockroach.height / 2.0 - 100, screenHeight / 2.0 - cockroach.height / 2.0 + 100);
+                    obstacle2Pos.x = renderWidth + cockroach.width / 2.0;
+                    obstacle2Pos.y = randint(renderHeight / 2.0 - cockroach.height / 2.0 - 100, renderHeight / 2.0 - cockroach.height / 2.0 + 100);
                 }
 
                 if (playerPosition.x > obs1X - 25 && playerPosition.x < obs1X + 25) {
@@ -266,13 +266,13 @@ int game(void) {
                 }
 
                 if (newHighscore) {
-                    DrawText("NEW HIGHSCORE!", screenWidth / 10, screenHeight / 2 - 175, 50, GREEN);
+                    DrawText("NEW HIGHSCORE!", renderWidth / 10, renderHeight / 2 - 175, 50, GREEN);
                 }
                 
-                const char *pointText = TextFormat("points: %i", points);
-                DrawText(pointText, screenWidth / 10, screenHeight / 2 - 125, 50, MAROON);
-                DrawText("tuhkamuna is kil", screenWidth / 10, screenHeight / 2 - 75, 100, RED);
-                DrawText("no (press R to restart)", screenWidth / 10, screenHeight / 2 + 25, 50, MAROON);
+                const char* pointText = TextFormat("points: %i", points);
+                DrawText(pointText, renderWidth / 10, renderHeight / 2 - 125, 50, MAROON);
+                DrawText("tuhkamuna is kil", renderWidth / 10, renderHeight / 2 - 75, 100, RED);
+                DrawText("no (press R to restart)", renderWidth / 10, renderHeight / 2 + 25, 50, MAROON);
 
                 if (IsKeyPressed(KEY_R)) {
                     return -1;
@@ -280,24 +280,24 @@ int game(void) {
             }
         }
         else {
-            DrawText("press S to start", screenWidth / 10, screenHeight / 2 - 50, 90, GREEN);
+            DrawText("press S to start", renderWidth / 10, renderHeight / 2 - 50, 90, GREEN);
 
             if (IsKeyPressed(KEY_S)) {
                 gameStarted = 1;
             }
         }
 
-        const char *pointText = TextFormat("Points: %i", points);
+        const char* pointText = TextFormat("Points: %i", points);
         DrawRectangle(0, 0, 14 * strlen(pointText), 30, BLACK);
         DrawText(pointText, 5, 5, 20, WHITE);
 
-        const char *highscoreText = TextFormat("Highscore: %i", highscore);
+        const char* highscoreText = TextFormat("Highscore: %i", highscore);
         DrawRectangle(0, 30, 14 * strlen(highscoreText), 30, BLACK);
         DrawText(highscoreText, 5, 35, 20, WHITE);
 
-        const char *fpsText = TextFormat("FPS: %i", GetFPS());
-        DrawRectangle(screenWidth - 14 * strlen(fpsText), 0, 14 * strlen(fpsText), 30, BLACK);
-        DrawText(fpsText, screenWidth - 14 * strlen(fpsText) + 5, 5, 20, WHITE);
+        const char* fpsText = TextFormat("FPS: %i", GetFPS());
+        DrawRectangle(renderWidth - 14 * strlen(fpsText), 0, 14 * strlen(fpsText), 30, BLACK);
+        DrawText(fpsText, renderWidth - 14 * strlen(fpsText) + 5, 5, 20, WHITE);
         
         EndTextureMode();
 
@@ -310,14 +310,14 @@ int game(void) {
         Rectangle source = { 0, 0, (float)target.texture.width, (float)-target.texture.height };
 
         //magic
-        float ratio = (float)screenWidth / screenHeight;
+        float ratio = (float)renderWidth / renderHeight;
         Rectangle dest;
         if ((float)windowWidth / windowHeight >= ratio) {
-            ratio = (float)screenWidth / screenHeight;
+            ratio = (float)renderWidth / renderHeight;
             dest = (Rectangle){ (windowWidth - ratio * windowHeight) / 2, 0, ratio * windowHeight, windowHeight };
         }
         else {
-            ratio = (float)screenHeight / screenWidth;
+            ratio = (float)renderHeight / renderWidth;
             dest = (Rectangle){ 0, (windowHeight - ratio * windowWidth) / 2, windowWidth, ratio * windowWidth };
         }
 

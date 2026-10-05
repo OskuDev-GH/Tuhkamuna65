@@ -1,3 +1,4 @@
 build/tuhkamuna65
 build/*.zip
 build/high.bin
+raylib/*
